@@ -11,3 +11,8 @@ spring:
     suffix: .html
     mode: HTML
     cache: false
+
+  mvc:
+    validation:
+      enabled: true
+      locale: zh_TW

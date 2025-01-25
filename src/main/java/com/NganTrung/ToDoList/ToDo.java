@@ -1,14 +1,20 @@
 package com.NganTrung.ToDoList;
 
+import jakarta.validation.constraints.*;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 
 @Component
 public class ToDo {
+    @PositiveOrZero
     int id;
+
+    @NotBlank
+    @Size(max = 100)
     String title;
+
+    @Size(max = 1500)
     String content;
+
     boolean completed;
 
     public int getId() {

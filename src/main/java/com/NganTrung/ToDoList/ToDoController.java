@@ -1,13 +1,17 @@
 package com.NganTrung.ToDoList;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
+@Validated
 public class ToDoController {
     @Autowired
     Service service;
@@ -36,7 +40,7 @@ public class ToDoController {
     }
 
     @GetMapping("/searchTitle/{title}")
-    public ResponseEntity<List<ToDo>> getByTitle(@PathVariable String title) {
+    public ResponseEntity<List<ToDo>> getByTitle(@PathVariable @Size(max = 100) String title) {
         try {
             if (title == null || title.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -49,7 +53,7 @@ public class ToDoController {
     }
 
     @PostMapping("/content")
-    public ResponseEntity<List<ToDo>> getByContent(@RequestBody ToDo toDo) {
+    public ResponseEntity<List<ToDo>> getByContent(@RequestBody  @Valid ToDo toDo) {
         try {
             if (toDo.getContent() == null || toDo.getContent().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
@@ -72,12 +76,15 @@ public class ToDoController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ToDo> createToDo(@RequestBody ToDo toDo) {
+    public ResponseEntity<ToDo> createToDo(@RequestBody  @Valid ToDo toDo) {
         try {
             if (toDo == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
             ToDo createdToDo = service.createToDo(toDo);
+            if (createdToDo == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(createdToDo);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -85,7 +92,7 @@ public class ToDoController {
     }
 
     @PutMapping("/override")
-    public ResponseEntity<ToDo> overrideToDo(@RequestBody ToDo toDo) {
+    public ResponseEntity<ToDo> overrideToDo(@RequestBody  @Valid ToDo toDo) {
         try {
             if (toDo == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
