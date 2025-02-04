@@ -12,6 +12,7 @@ import java.util.*;
 
 @RestController
 @Validated
+@RequestMapping("/api")
 public class ToDoController {
     @Autowired
     Service service;
